@@ -1,0 +1,28 @@
+name: rafiq
+description: رفيق - مساعدك الذكي التونسي
+publish_to: 'none'
+version: 2.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  http: ^1.2.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  provider: ^6.1.1
+  intl: ^0.19.0
+  shared_preferences: ^2.2.2
+  url_launcher: ^6.2.4
+  connectivity_plus: ^6.0.1
+  google_fonts: ^6.2.1
+  video_player: ^2.8.3
+  audioplayers: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
