@@ -5,8 +5,6 @@ workflows:
     environment:
       flutter: stable
       java: 17
-      android_signing:
-        - rafik_keystore          # ← اسم الـ keystore في Codemagic
 
     triggering:
       events:
@@ -19,26 +17,20 @@ workflows:
       - name: Get Flutter packages
         script: flutter pub get
 
-      - name: Build APK (Release)
+      - name: Build APK
         script: |
           flutter build apk --release \
             --build-name=2.0.0 \
             --build-number=$BUILD_NUMBER
 
-      - name: Build AAB (Google Play)
-        script: |
-          flutter build appbundle --release \
-            --build-name=2.0.0 \
-            --build-number=$BUILD_NUMBER
-
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
-      - build/app/outputs/bundle/release/app-release.aab
 
     publishing:
       email:
         recipients:
-          - rzcode403@gmail.com        # ← بريدك الإلكتروني
+          - rzcode403@gmail.com
         notify:
           success: true
           failure: true
+
