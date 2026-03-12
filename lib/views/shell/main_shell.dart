@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../../controllers/app_controller.dart';
 import '../../models/app_config.dart';
 import '../screens/home_screen.dart';
 import '../screens/weather_screen.dart';
@@ -13,8 +15,29 @@ class MainShell extends StatefulWidget {
   State<MainShell> createState() => _MainShellState();
 }
 
-class _MainShellState extends State<MainShell> {
+class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   int _idx = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // ⚠️ مراقبة دورة حياة التطبيق لكشف إلغاء التفعيل
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // عند عودة التطبيق للواجهة → تحقق من التفعيل فوراً
+    if (state == AppLifecycleState.resumed) {
+      context.read<AppController>().recheckActivation();
+    }
+  }
 
   List<AppSection> get _navSections =>
       AppConfig.sections.where((s) => s.navBar).toList();
@@ -26,7 +49,7 @@ class _MainShellState extends State<MainShell> {
       case 'prayer':  return const PrayerScreen();
       case 'news':    return const NewsScreen();
       case 'more':    return const MoreScreen();
-      default:        return HomeScreen(key: ValueKey(s.key));
+      default:        return const HomeScreen();
     }
   }
 
@@ -37,7 +60,6 @@ class _MainShellState extends State<MainShell> {
     final idx = _idx.clamp(0, nav.length - 1);
 
     return Scaffold(
-      // إصلاح: resizeToAvoidBottomInset يمنع التداخل مع لوحة المفاتيح
       resizeToAvoidBottomInset: true,
       body: IndexedStack(
         index: idx,
