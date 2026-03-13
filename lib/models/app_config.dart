@@ -69,6 +69,15 @@ class AppConfig {
 }
 
 // ── AppSection ──────────────────────────────────────────────
+// دالة مساعدة — تقبل "1", 1, true, "true" كـ true
+bool _parseBool(dynamic v) {
+  if (v == null) return false;
+  if (v is bool) return v;
+  if (v is int) return v == 1;
+  return v.toString() == '1' || v.toString().toLowerCase() == 'true';
+}
+
+// ── AppSection ──────────────────────────────────────────────
 class AppSection {
   final String key, nameAr, icon, color, description, navIcon;
   final bool isPremium, navBar;
@@ -80,14 +89,6 @@ class AppSection {
   Color get colorObj {
     try { return Color(int.parse('FF${color.replaceAll('#', '').padLeft(6,'0')}', radix: 16)); }
     catch (_) { return AppConfig.colorPrimary; }
-  }
-
-  // مساعد: يقبل "1", 1, true, "true" كـ true
-  static bool _parseBool(dynamic v) {
-    if (v == null) return false;
-    if (v is bool) return v;
-    if (v is int) return v == 1;
-    return v.toString() == '1' || v.toString().toLowerCase() == 'true';
   }
 
   factory AppSection.fromJson(Map<String, dynamic> j) => AppSection(
